@@ -11,13 +11,23 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE"]
+    origin: [
+      "http://localhost:5173",
+      "https://pursuit-bash-pledge.netlify.app"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
   }
 });
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://pursuit-bash-pledge.netlify.app"
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 // Make io available to routes
