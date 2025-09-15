@@ -5,7 +5,7 @@ const { Server } = require('socket.io');
 require('dotenv').config();
 
 const db = require('./db/database');
-const pledgeRoutes = require('./routes/pledges');
+const { router: pledgeRoutes, checkForNewTextPledges } = require('./routes/pledges');
 
 const app = express();
 const server = createServer(app);
@@ -58,4 +58,11 @@ const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Frontend URL: ${process.env.FRONTEND_URL || "http://localhost:5173"}`);
+  
+  // Start polling for new text pledges every 5 seconds
+  setInterval(() => {
+    checkForNewTextPledges(io);
+  }, 5000);
+  
+  console.log('Text pledge polling started (every 5 seconds)');
 });
