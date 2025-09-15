@@ -168,14 +168,16 @@ router.get('/text-pledges', async (req, res) => {
   try {
     const pledges = await smsDb.any(`
       SELECT 
-        id,
-        pledge_amount,
-        phone_number,
-        message_text as message,
-        timestamp AT TIME ZONE 'UTC' AT TIME ZONE 'America/New_York' as created_at,
-        pledge_amount as amount_dollars
-      FROM sms_pledges 
-      ORDER BY timestamp DESC 
+        s.id,
+        s.pledge_amount,
+        s.phone_number,
+        s.message_text as message,
+        s.timestamp AT TIME ZONE 'UTC' AT TIME ZONE 'America/New_York' as created_at,
+        s.pledge_amount as amount_dollars,
+        COALESCE(g.first_name || ' ' || g.last_name, 'Unknown') as guest_name
+      FROM sms_pledges s
+      LEFT JOIN guests g ON s.guest_id = g.id
+      ORDER BY s.timestamp DESC 
       LIMIT 50
     `);
     
