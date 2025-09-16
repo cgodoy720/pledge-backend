@@ -30,7 +30,7 @@ const emitTotalUpdate = async (io) => {
     
     const paddleTotalCents = parseInt(paddleResult.paddle_total_cents);
     const textTotalCents = parseInt(smsResult.text_total_cents);
-    const grandTotalCents = paddleTotalCents + textTotalCents;
+    const grandTotalCents = paddleTotalCents; // Text pledges excluded from grand total
     
     console.log('Emitting totals update:', { 
       paddle: paddleTotalCents, 
@@ -91,7 +91,7 @@ router.get('/totals', async (req, res) => {
     
     const paddleTotalCents = parseInt(paddleResult.paddle_total_cents);
     const textTotalCents = parseInt(smsResult.text_total_cents);
-    const grandTotalCents = paddleTotalCents + textTotalCents;
+    const grandTotalCents = paddleTotalCents; // Text pledges excluded from grand total
     
     res.json({
       grandTotal: grandTotalCents,
